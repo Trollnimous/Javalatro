@@ -225,7 +225,7 @@ class Nada extends TipoDeMano
 {
 	public Nada()
 	{
-		this.nombre = "     ";
+		this.nombre = "";
 		this.fichasBase = 0;
 		this.multBase = 0;
 		this.idMano = 0;
