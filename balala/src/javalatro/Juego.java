@@ -1,4 +1,4 @@
-package balala;	
+package javalatro;	
 import java.util.Scanner;
 
 public class Juego

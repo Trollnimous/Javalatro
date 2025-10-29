@@ -1,4 +1,4 @@
-package balala;
+package javalatro;
 
 
 public class TipoDeMano
