@@ -57,7 +57,7 @@ class Poker extends TipoDeMano
 {
 	public Poker()
 	{
-		this.nombre = "Poker";
+		this.nombre = "Poker ";
 		this.fichasBase = 60;
 		this.multBase = 7;
 		this.idMano = 5;
@@ -71,7 +71,7 @@ class Trio extends TipoDeMano
 {
 	public Trio()
 	{
-		this.nombre = "Trío";
+		this.nombre = "Trío ";
 		this.fichasBase = 30;
 		this.multBase = 3;
 		this.idMano = 9;
@@ -85,7 +85,7 @@ class Pareja extends TipoDeMano
 {
 	public Pareja()
 	{
-		this.nombre = "Pareja";
+		this.nombre = "Pareja ";
 		this.fichasBase = 10;
 		this.multBase = 2;
 		this.idMano = 11;
@@ -99,7 +99,7 @@ class CartaAlta extends TipoDeMano
 {
 	public CartaAlta()
 	{
-		this.nombre = "Carta Alta";
+		this.nombre = "Carta Alta ";
 		this.fichasBase = 5;
 		this.multBase = 1;
 		this.idMano = 12;
@@ -127,7 +127,7 @@ class FullHouse extends TipoDeMano
 {
 	public FullHouse()
 	{
-		this.nombre = "Full House";
+		this.nombre = "Full House ";
 		this.fichasBase = 40;
 		this.multBase = 4;
 		this.idMano = 6;
@@ -141,7 +141,7 @@ class DoblePareja extends TipoDeMano
 {
 	public DoblePareja()
 	{
-		this.nombre = "Doble Pareja";
+		this.nombre = "Doble Pareja ";
 		this.fichasBase = 20;
 		this.multBase = 2;
 		this.idMano = 10;
@@ -155,7 +155,7 @@ class ColorCasa extends TipoDeMano
 {
 	public ColorCasa()
 	{
-		this.nombre = "Color Casa";
+		this.nombre = "Color Casa ";
 		this.fichasBase = 140;
 		this.multBase = 14;
 		this.idMano = 2;
@@ -169,7 +169,7 @@ class Escalera extends TipoDeMano
 {
 	public Escalera()
 	{
-		this.nombre = "Escalera";
+		this.nombre = "Escalera ";
 		this.fichasBase = 30;
 		this.multBase = 4;
 		this.idMano = 8;
@@ -183,7 +183,7 @@ class EscaleraReal extends TipoDeMano
 {
 	public EscaleraReal()
 	{
-		this.nombre = "Escalera de Color de Reyes de la Realeza";
+		this.nombre = "Escalera de Color de Reyes de la Realeza ";
 		this.fichasBase = 100;
 		this.multBase = 8;
 		this.idMano = 4;
@@ -211,7 +211,7 @@ class Poker5 extends TipoDeMano
 {
 	public Poker5()
 	{
-		this.nombre = "Poker 5";
+		this.nombre = "Poker 5 ";
 		this.fichasBase = 120;
 		this.multBase = 12;
 		this.idMano = 2;
@@ -225,7 +225,7 @@ class Nada extends TipoDeMano
 {
 	public Nada()
 	{
-		this.nombre = "";
+		this.nombre = " ";
 		this.fichasBase = 0;
 		this.multBase = 0;
 		this.idMano = 0;

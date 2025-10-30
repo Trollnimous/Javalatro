@@ -49,4 +49,15 @@ public class ControladorJuego
 			subirAnte();
 		}
 	}
+	public void rondaGanada(PerfilJugador estadoJugador, Scoring scoring, Baraja baraja, Mano manoJugador, int seedRelativa)
+	{
+		System.out.println("\n¡PASAS DE RONDA!\n");
+		this.subirRonda();
+		this.seguirEnAnte();
+		estadoJugador.iniciarRonda();
+		scoring.reiniciarScoreTotal();
+		baraja.devolverCartasABaraja();
+		manoJugador.vaciarMano();
+		manoJugador.robarMano2(baraja, seedRelativa);
+	}
 }

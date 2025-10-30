@@ -4,6 +4,23 @@ import java.util.Scanner;
 import java.util.Random;
 public class Comprobador
 {
+	public static boolean seHaLlegadoAlScore(Scoring scoring, ControladorJuego controlador)
+	{
+		if(scoring.scoreTotal >=controlador.scoreRequerido())
+		{
+			return true;
+		}
+		return false;
+	}
+	//Comprueba si te has quedado sin manos
+	public static boolean sinManosRestantes(int manos)
+	{
+		if(manos < 1)
+		{
+			return true;
+		}
+		return false;
+	}
 	//Devuelve true si no hay cartas para robar y te has quedado sin cartas
 	public static boolean noQuedanCartasJugar(Mano manoJugador, Baraja baraja)
 	{
@@ -17,6 +34,10 @@ public class Comprobador
 	public static int longitudNumero(int num)
 	{
 		int contador = 0;
+		if(num == 0)
+		{
+			return 1;
+		}
 		for(int x = num; x > 0; x/=10)
 		{
 			contador++;

@@ -53,10 +53,14 @@ public class Menu
 	}
 	public void menuPrincipal(Scanner entrada)
 	{
+		int eleccion = -1;
 		do {
 		this.numeroDeOpciones = 3;
 		String eleccionString = "";
-		int eleccion = 1;
+		
+		//Si se elige nueva partida se pide baraja directamente
+		if(eleccion != 1)
+		{
 		System.out.println("     ____   ____  __ __   ____  _       ____  ______  ____   ___  \r\n"
 				+ "    |    | /    ||  |  | /    || |     /    ||      ||    \\ /   \\ \r\n"
 				+ "    |__  ||  o  ||  |  ||  o  || |    |  o  ||      ||  D  )     |\r\n"
@@ -77,6 +81,7 @@ public class Menu
 			
 		}while(!eleccionValida(eleccionString));
 		eleccion = Integer.decode(eleccionString);
+		}
 		switch(eleccion)
 		{
 			case 1:
@@ -87,7 +92,6 @@ public class Menu
 					//Seed 
 					int seed = Comprobador.setearSeed(entrada);
 					Random random = new Random(seed);
-					System.out.println("\nSemilla de la partida: "+seed);
 					//Crear baraja elegida
 					Baraja baraja = new Baraja(eleccionBaraja);
 					//Controlador del juego
@@ -99,18 +103,24 @@ public class Menu
 					Mano manoSeleccionada = new Mano(5);
 					//Comprobador de manos y objetos manos
 					ComprobadorManoSeleccionada comprobadorMano = new ComprobadorManoSeleccionada();
-					//Efecto Baraja Roja
-					if(eleccionBaraja == 1)
+					switch(eleccionBaraja)
 					{
-						estadoJugador.descartesIniciales = estadoJugador.descartesIniciales +1;
+						//Baraja roja
+						case 1:
+							estadoJugador.descartesIniciales = estadoJugador.descartesIniciales +1;
+							break;
+						//Baraja azul
+						case 2:
+							estadoJugador.turnosManosIniciales = estadoJugador.turnosManosIniciales +1;
+							break;
+						default:
+							break;
 					}
-					//Efecto Baraja Azul
-					if(eleccionBaraja == 2)
-					{
-						estadoJugador.turnosManosIniciales = estadoJugador.turnosManosIniciales +1;
-					}
-					menuTurno(entrada, manoJugador, manoSeleccionada, random, estadoJugador, baraja, controladorJuego, comprobadorMano);
-					
+					eleccion = menuTurno(seed,entrada, manoJugador, manoSeleccionada, random, estadoJugador, baraja, controladorJuego, comprobadorMano);
+				}
+				else
+				{
+					eleccion = 0;
 				}
 				break;
 			case 2 :
@@ -129,8 +139,37 @@ public class Menu
 	
 	
 	}
-
-	public void menuTurno(Scanner entrada, Mano manoJugador,Mano manoSeleccionada, Random random, PerfilJugador estadoJugador, Baraja baraja, ControladorJuego controladorJuego,ComprobadorManoSeleccionada comprobadorMano )
+	//imprime el menú de perder
+	public int menuPerder(Scanner entrada, long seed )
+	{
+		this.numeroDeOpciones = 2;
+		String eleccionString = "";
+			
+		System.out.println("           __      __   ___  __   __     __   __  \r\n"
+				+ "|__|  /\\  /__`    |__) |__  |__) |  \\ | |  \\ /  \\ \r\n"
+				+ "|  | /~~\\ .__/    |    |___ |  \\ |__/ | |__/ \\__/ \r\n"
+				+ "                                                  ");
+		System.out.println("\nSemilla de la partida: "+seed);
+		System.out.println("\n[1]Nueva partida"
+				+ "			  [0]Menú principal\n");
+		do {
+			eleccionString = tomarEleccion(entrada);
+			
+		}while(!eleccionValida(eleccionString));
+		int eleccion = Integer.decode(eleccionString);
+		return eleccion;
+		
+	}
+	//imprime la mano de la ronda
+	public void imprirManoRonda(Mano manoJugador, Mano manoSeleccionada, PerfilJugador estadoJugador, ControladorJuego controladorJuego, ComprobadorManoSeleccionada comprobadorMano)
+	{
+		Mano.ordenarManoNumero(manoJugador);
+		InterfazGrafica.imprimirManoSeleccionada(manoJugador,manoSeleccionada);
+		System.out.printf(" %d/%d\n",manoJugador.manoJugador.size(), manoJugador.tamanoMano);
+		InterfazGrafica.imprimirEstadisticas(estadoJugador, manoSeleccionada, controladorJuego, comprobadorMano);
+		
+	}
+	public int menuTurno(int seed, Scanner entrada, Mano manoJugador,Mano manoSeleccionada, Random random, PerfilJugador estadoJugador, Baraja baraja, ControladorJuego controladorJuego,ComprobadorManoSeleccionada comprobadorMano )
 	{
 		this.numeroDeOpciones = 7;
 		
@@ -143,37 +182,25 @@ public class Menu
 		boolean imprimirMano = true;
 		//Vaciar seleccion
 		manoSeleccionada.vaciarMano();
+		String eleccionString = "";
 		
 		do {
 			//Si se ha llegado a la puntuación, se pasa de ronda
-			if(scoring.scoreTotal >=controladorJuego.scoreRequerido())
+			if(Comprobador.seHaLlegadoAlScore(scoring, controladorJuego))
 			{
-				System.out.println("\n¡PASAS DE RONDA!\n");
-				controladorJuego.subirRonda();
-				controladorJuego.seguirEnAnte();
-				estadoJugador.iniciarRonda();
-				
-				scoring.reiniciarScoreTotal();
-				baraja.devolverCartasABaraja();
-				manoJugador.robarMano2(baraja, seedRelativa);
+				controladorJuego.rondaGanada(estadoJugador, scoring, baraja, manoJugador, seedRelativa);
 			}
-			System.out.println("--------------------------------\n");
-			System.out.println("Score requerido: "+controladorJuego.scoreRequerido());
-			System.out.println("\n--------------------------------\n");
-			String eleccionString = "";
+			//Si no quedan cartas para jugar o no tienes manos
+			if(Comprobador.noQuedanCartasJugar(manoJugador, baraja)||Comprobador.sinManosRestantes(estadoJugador.turnosManosActuales))
+			{
+				return menuPerder(entrada, seed);
+			}
+			InterfazGrafica.imprimirScoreRequerido(controladorJuego);
 			int eleccion = 1;
-			if(Comprobador.noQuedanCartasJugar(manoJugador, baraja)||estadoJugador.turnosManosActuales==0)
-			{
-				System.out.println("\n\nHAS PERDIDO\n\n");
-				return;
-			}
 			manoJugador.robarMano2(baraja, seedRelativa);
 			if(imprimirMano)
 			{
-				Mano.ordenarManoNumero(manoJugador);
-				InterfazGrafica.imprimirManoSeleccionada(manoJugador,manoSeleccionada);
-				System.out.printf(" %d/%d\n",manoJugador.manoJugador.size(), manoJugador.tamanoMano);
-				InterfazGrafica.imprimirEstadisticas(estadoJugador, manoSeleccionada, controladorJuego, comprobadorMano);
+				imprirManoRonda(manoJugador, manoSeleccionada, estadoJugador,controladorJuego, comprobadorMano);
 				imprimirMano = false;
 			}
 			System.out.println("\n[1] Seleccionar Cartas");
@@ -182,7 +209,6 @@ public class Menu
 			System.out.println("[4] Quitar Selección");
 			System.out.println("[5] Mover Cartas");
 			System.out.println("[6] Mostrar Baraja");
-
 			System.out.println("[0] Volver al menú principal");
 			System.out.println();
 			do {
@@ -255,7 +281,7 @@ public class Menu
 					System.out.println("\n"+baraja.nombre+":\n");
 					InterfazGrafica.imprimirBarajaRobadas(baraja);
 					System.out.println();
-					InterfazGrafica.imprimirManoSeleccionada(manoJugador,manoSeleccionada);
+					imprimirMano = true;
 					break;
 
 				case 0:
@@ -285,5 +311,6 @@ public class Menu
 					break;
 			}
 		}while(!salirMenu);
+		return 0;
 	}
 }

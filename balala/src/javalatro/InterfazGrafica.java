@@ -3,6 +3,15 @@ import java.util.Comparator;
 
 public class InterfazGrafica
 {
+	//Le das el espacio a llenar y la longitud variablea comprobar y te llena los espacios justos para que quepa la variable
+	public static void imprimirEspaciosVariable(int numeroDeEspacios, int variableComprobar)
+	{
+		int longitudVariable = Comprobador.longitudNumero(variableComprobar);
+		for(int x = 0; x < numeroDeEspacios-longitudVariable; x++)
+		{
+			System.out.print(" ");
+		}
+	}
 	//Imprimir datos del jugador
 	public static void imprimirPerfilJugador(PerfilJugador estadoJugador)
 	{
@@ -11,6 +20,27 @@ public class InterfazGrafica
 		System.out.println("Descartes: "+estadoJugador.descartesActuales);
 		System.out.println("Oro: "+estadoJugador.dinero);
 		System.out.println("---------------------------------");
+	}
+	//Imprimir nombre de la mano
+	public static void imprimirNombreManoMenu(String nombreMano, int espacioTotal)
+	{
+		int espaciosImprimir = (espacioTotal-nombreMano.length())/2;
+		for(int x = 0; x < espaciosImprimir; x++)
+		{
+			System.out.print(" ");
+		}
+		System.out.print(nombreMano);
+		for(int x = 0; x < espaciosImprimir; x++)
+		{
+			System.out.print(" ");
+		}
+	}
+	//Imprime el score requerido
+	public static void imprimirScoreRequerido(ControladorJuego controlador)
+	{
+		System.out.println("--------------------------------\n");
+		System.out.println("Score requerido: "+controlador.scoreRequerido());
+		System.out.println("\n--------------------------------\n");
 	}
 	//Imprime los creditos
 	public static void imprimirCreditos()
@@ -29,60 +59,38 @@ public class InterfazGrafica
 				);
 		
 	}
-	//Imprimir estadísticas del jugador
+	//Imprimir estadísticas del jugador un @ indica donde poner la funcion imprimirEspacios
+	/*	┌───────────────┬───────────────────────────────────────────────────┬─────────────┐
+		│ Manos: 4@     │                                                   │@    Ante: 1 │
+		├───────────────┼───────────────────────────────────────────────────┼─────────────┤
+		│ Descartes: 4@ │@                      0 X 0@                      │@   Ronda: 1 │
+		└───────────────┴───────────────────────────────────────────────────┴─────────────┘
+	 * 
+	 */
 	public static void imprimirEstadisticas(PerfilJugador estadoJugador, Mano manoSeleccionada, ControladorJuego contadorAntes,ComprobadorManoSeleccionada comprobadorMano )
 	{
 		TipoDeMano tipoDeMano = comprobadorMano.seleccionarManoJugada(manoSeleccionada);
-		System.out.println("┌───────────────┬──────────────────────────────────────────────────┬─────────────┐");
-		System.out.printf( "│ Manos: %d",estadoJugador.turnosManosActuales);   
-		if(Comprobador.longitudNumero(estadoJugador.turnosManosActuales)==1)
-		{
-			System.out.print("  ");
-		}
-		else
-		{
-			System.out.print(" ");
-		}
-		System.out.print("    │");
-		//Alargar de aqui
-		System.out.printf("                                                  ");
-		System.out.print("│ ");
-		if(Comprobador.longitudNumero(contadorAntes.ante)==1)
-		{
-			System.out.print("  ");
-		}
-		else
-		{
-			System.out.print(" ");
-		}
-		System.out.printf("Ante: %d   │\n",contadorAntes.ante);
-		System.out.println(       "├───────────────┼──────────────────────────────────────────────────┼─────────────┤");
-		System.out.printf( "│ Descartes: %d",estadoJugador.descartesActuales);   
-		if(Comprobador.longitudNumero(estadoJugador.descartesActuales)==1)
-		{
-			System.out.print("  ");
-		}
-		else
-		{
-			System.out.print(" ");
-		}
+		System.out.println("┌───────────────┬───────────────────────────────────────────────────┬─────────────┐");
+		System.out.printf( "│ Manos: %d",estadoJugador.turnosManosActuales);imprimirEspaciosVariable(7,estadoJugador.turnosManosActuales);
+		
 		System.out.print("│");
-		System.out.printf("                                                  │ ");
-		System.out.printf(" Ronda: %d",contadorAntes.ronda);
-		if(Comprobador.longitudNumero(contadorAntes.ronda) == 1)
-		{
-			System.out.print("   ");
-		}
-		else if(Comprobador.longitudNumero(contadorAntes.ronda)== 2)
-		{
-			System.out.print("  ");
-		}
-		else
-		{
-			System.out.print(" ");
-		}
-		System.out.println("│");
-		System.out.println("└───────────────┴──────────────────────────────────────────────────┴─────────────┘");
+		imprimirNombreManoMenu(tipoDeMano.nombre, 51);
+		System.out.print("│ ");
+		imprimirEspaciosVariable(5,contadorAntes.ante);
+		System.out.printf("Ante: %d │\n",contadorAntes.ante);
+		System.out.println("├───────────────┼───────────────────────────────────────────────────┼─────────────┤");
+		System.out.printf( "│ Descartes: %d",estadoJugador.descartesActuales);   
+		imprimirEspaciosVariable(3,estadoJugador.descartesActuales);
+		System.out.print("│");
+		imprimirEspaciosVariable(24, tipoDeMano.fichasActuales);
+		System.out.print(tipoDeMano.fichasActuales);
+		System.out.print(" X ");
+		System.out.print(tipoDeMano.multActual);
+		imprimirEspaciosVariable(24, tipoDeMano.multActual);
+		System.out.print("│");
+		imprimirEspaciosVariable(5, contadorAntes.ronda);
+		System.out.printf("Ronda: %d │\n",contadorAntes.ronda);
+		System.out.println("└───────────────┴───────────────────────────────────────────────────┴─────────────┘");
 	}
 	//Imprime la baraja seleccionada
 	public static void imprimirBaraja(Baraja baraja)
