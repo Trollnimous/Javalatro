@@ -127,9 +127,9 @@ public class Menu
 				InterfazGrafica.imprimirCreditos();
 				break;
 			case 0:
-				System.out.println("\n-----------------------------");
+				System.out.println("\n------------------------------");
 				System.out.println("CERRANDO JUEGO, BUEN DÍA PAPU");
-				System.out.println("-----------------------------");
+				System.out.println("------------------------------");
 				return;
 			default:
 				System.out.println("ERROR: eleccion no reconocida");
@@ -193,7 +193,7 @@ public class Menu
 			//Si no quedan cartas para jugar o no tienes manos
 			if(Comprobador.noQuedanCartasJugar(manoJugador, baraja)||Comprobador.sinManosRestantes(estadoJugador.turnosManosActuales))
 			{
-				return menuPerder(entrada, seed);
+				return menuPerder(entrada, (long)seed);
 			}
 			InterfazGrafica.imprimirScoreRequerido(controladorJuego);
 			int eleccion = 1;
