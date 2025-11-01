@@ -163,7 +163,10 @@ public class Menu
 	//imprime la mano de la ronda
 	public void imprirManoRonda(Mano manoJugador, Mano manoSeleccionada, PerfilJugador estadoJugador, ControladorJuego controladorJuego, ComprobadorManoSeleccionada comprobadorMano)
 	{
-		Mano.ordenarManoNumero(manoJugador);
+		for(Carta carta : manoJugador.manoJugador)
+		{
+			System.out.printf("Carta %d %s\n", carta.numero, carta.palo);
+		}
 		InterfazGrafica.imprimirManoSeleccionada(manoJugador,manoSeleccionada);
 		System.out.printf(" %d/%d\n",manoJugador.manoJugador.size(), manoJugador.tamanoMano);
 		InterfazGrafica.imprimirEstadisticas(estadoJugador, manoSeleccionada, controladorJuego, comprobadorMano);
@@ -172,7 +175,7 @@ public class Menu
 	public int menuTurno(int seed, Scanner entrada, Mano manoJugador,Mano manoSeleccionada, Random random, PerfilJugador estadoJugador, Baraja baraja, ControladorJuego controladorJuego,ComprobadorManoSeleccionada comprobadorMano )
 	{
 		this.numeroDeOpciones = 7;
-		
+		boolean manoJugada = false;
 		estadoJugador.iniciarRonda();
 		//Iniciar scoring
 		Scoring scoring = new Scoring();
@@ -182,6 +185,8 @@ public class Menu
 		boolean imprimirMano = true;
 		//Vaciar seleccion
 		manoSeleccionada.vaciarMano();
+		manoJugador.robarMano2(baraja, seedRelativa);
+		manoJugador = Mano.ordenarManoNumero(manoJugador);
 		String eleccionString = "";
 		
 		do {
@@ -198,6 +203,11 @@ public class Menu
 			InterfazGrafica.imprimirScoreRequerido(controladorJuego);
 			int eleccion = 1;
 			manoJugador.robarMano2(baraja, seedRelativa);
+			if(manoJugada)
+			{
+				manoJugador = Mano.ordenarManoNumero(manoJugador);
+				manoJugada = false;
+			}
 			if(imprimirMano)
 			{
 				imprirManoRonda(manoJugador, manoSeleccionada, estadoJugador,controladorJuego, comprobadorMano);
@@ -221,7 +231,7 @@ public class Menu
 				case 1:
 					manoSeleccionada.vaciarMano();
 					manoSeleccionada.seleccionarMano(manoJugador, entrada);
-					Mano.ordenarManoNumero(manoSeleccionada);
+
 					imprimirMano = true;
 					break;
 				case 2 :
@@ -230,13 +240,14 @@ public class Menu
 						System.out.println("Quitando cartas jugadas: ");
 						manoJugador.quitarCartasJugadas(manoSeleccionada);
 						InterfazGrafica.imprimirManoSeleccionada(manoSeleccionada, comprobadorMano.sacarManoValida(manoSeleccionada,comprobadorMano.seleccionarManoJugada(manoSeleccionada)));
-						Mano.ordenarManoNumero(manoJugador);
+
 						InterfazGrafica.imprimirManoSeleccionada(manoJugador,manoSeleccionada);
 						System.out.printf(" %d/%d\n",manoJugador.manoJugador.size(), manoJugador.tamanoMano);
 						manoSeleccionada.jugarMano(scoring,comprobadorMano);
-						
 						manoSeleccionada.vaciarMano();
 						estadoJugador.turnosManosActuales = estadoJugador.turnosManosActuales-1;
+						manoJugada = true;
+						
 					}
 					else
 					{
@@ -252,14 +263,15 @@ public class Menu
 							Mano.descartarSeleccion(manoJugador, manoSeleccionada);
 							estadoJugador.descartesActuales = estadoJugador.descartesActuales -1;
 							System.out.println("\nDescartes disponibles: "+estadoJugador.descartesActuales);
-							System.out.println("Vaciar Mano:");
 							manoSeleccionada.vaciarMano();
-							imprimirMano = true;
+							
 						}
 						else
 						{
 							System.out.println("\nSelecciona cartas a descartar\n");
 						}
+						imprimirMano = true;
+						manoJugada = true;
 					}
 					else
 					{
@@ -274,7 +286,13 @@ public class Menu
 					break;
 			
 				case 5 :
-					System.out.println("Programar esto");
+					manoJugador = Mano.moverCarta(manoJugador, entrada);
+					System.out.println();
+					for(Carta carta : manoJugador.manoJugador)
+					{
+						System.out.printf("Carta %d %s\n", carta.numero, carta.palo);
+					}
+					imprimirMano = true;
 
 					break;
 				case 6 :

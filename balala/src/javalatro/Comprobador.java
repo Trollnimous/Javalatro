@@ -12,6 +12,82 @@ public class Comprobador
 		}
 		return false;
 	}
+	//Devuelve false si el array está vacio
+	public static boolean arrayVacio(int[] array)
+	{
+		if(array.length > 0)
+		{
+			return false;
+		}
+		return true;
+	}
+	//Devuelve la ultima posicion en la que se encuentra un numero en un array ordenado
+	public static int ultimaPosicion(int[]array, int numeroComprobar)
+	{
+		int ultimaPosicion = 0;
+		if(arrayVacio(array))
+		{
+			System.out.println("Comprobador.ultimaPosicion: array vacio");
+		}
+		for(int x = 0; x < array.length; x++)
+		{
+			if(array[x] == numeroComprobar)
+			{
+				ultimaPosicion = x;
+			}
+		}
+		return ultimaPosicion;
+	}
+	//Devuleve la frecuencia de un numero en un array
+	public static int contarFrecuenciaNumeroArray(int[] array, int numeroComprobar)
+	{
+		int contador = 0;
+		if(arrayVacio(array))
+		{
+			System.out.println("Comprobador.contarFrecuenciaNumeroArray: array vacío");
+			return contador;
+		}
+		for(int x = 0; x < array.length; x++)
+		{
+			if(array[x] == numeroComprobar)
+			{
+				contador++;
+			}
+		}
+		return contador;
+	}
+	//Mueve los elementos de un array a la derecha, salvo ceros, e introduce el numero en la poscion inicial
+	//Param [4,2,0,0] , 3, 1 -> [4,3,2,0]
+	public static void moverALaDerecha (int[] arrayOrdenar, int posicionInicial, int numeroMeter)
+	{
+		
+		if(arrayOrdenar.length < 1)
+		{
+			System.out.println("\nArray a comprobar vacío\n");
+			return;
+		}
+		int posPrimerCero = -1;
+		for(int x = 0; x < arrayOrdenar.length; x++)
+		{
+			if(arrayOrdenar[x] == 0)
+			{
+				posPrimerCero = x;
+				break;
+			}
+		}
+		if(posPrimerCero == -1)
+		{
+			return;
+		}
+		for(int x = posPrimerCero; x > posicionInicial; x--)
+		{
+			arrayOrdenar[x] = arrayOrdenar[x-1];
+		}
+		
+		arrayOrdenar[posicionInicial] = numeroMeter;
+		
+		return;
+	}
 	//Comprueba si te has quedado sin manos
 	public static boolean sinManosRestantes(int manos)
 	{
@@ -73,15 +149,18 @@ public class Comprobador
 		{
 			return true;
 		}
-		System.out.println("\nERROR: no se pueden seleccionar más de 5 cartas\n");
+		System.out.println("\nERROR: no se pueden seleccionar más de "+(numero-1)+" cartas\n");
 		return false;
 	}
 	//Comprobar formato valido de seleccion de mano
-	public static boolean formatoSeleccionNumeroValido(String[] posicionesSeparadas, int tamanoMano)
+	public static boolean formatoSeleccionNumeroValido(String[] posicionesSeparadas, int tamanoMano, int numeroMaximoSelecciones)
 	{
+		numeroMaximoSelecciones++;
+		
 		//Comprueba que sea menor que 6 la longitud y que no tenga un espacio al principio
-		if(!stringVacio(posicionesSeparadas[0])&&arrayMenorQue(posicionesSeparadas,6))
+		if(posicionesSeparadas.length > 0 &&!stringVacio(posicionesSeparadas[0])&&arrayMenorQue(posicionesSeparadas,numeroMaximoSelecciones))
 		{
+
 			boolean posicionEnMano = true;
 			boolean repetidas = false;
 			boolean todosNumeros = true;
@@ -100,6 +179,7 @@ public class Comprobador
 			}
 			//Comprueba que no haya cartas repetidas
 			if(todosNumeros) {
+
 			String[] posicionesSeparadasR = posicionesSeparadas;
 			for(int x = 0; x<posicionesSeparadasR.length;x++)
 			{
@@ -107,7 +187,7 @@ public class Comprobador
 				{
 					if(Math.abs(Integer.valueOf(posicionesSeparadas[x]))==Math.abs(Integer.valueOf(posicionesSeparadas[y]))&&x!=y)
 					{
-						System.out.println("ERROR: Hay repetidas");
+						System.out.println("ERROR: Hay posiciones repetidas");
 						repetidas = true;
 						break;
 					}
@@ -134,6 +214,10 @@ public class Comprobador
 			{
 				return true;
 			}
+		}
+		else
+		{
+			System.out.println("\nIntroduce un formato válido\n");
 		}
 		
 		return false;

@@ -6,12 +6,14 @@ public class Carta
 	public int valor;
 	public int numero;
 	public boolean robada;
+	public boolean ordenada;
 	public String palo;
 	public String nombre;
 	public String simboloValor;
 	//Constructor de carta
 	public Carta(int numero, String palo)
 	{
+		this.ordenada = false;
 		this.robada = false;
 		this.palo = palo;
 		this.numero = numero;
